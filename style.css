@@ -1,0 +1,151 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+li {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+header {
+    grid-area: header;
+    padding: 1rem;
+    border-top: 2px solid grey;
+    margin-top: 0.5rem;
+    font-size: 2rem;
+}
+
+main {
+    grid-area: main;
+    padding: 1rem;
+}
+
+aside {
+    grid-area: aside;
+}
+
+.container {
+
+    display: grid;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer"
+        "aside";
+
+}
+
+/* Main section */
+main article {
+    display: grid;
+    border: 1px solid #eee;
+    padding: 1rem;
+    gap: 1rem;
+    box-shadow: 5px 5px 5px #888888;
+    margin-top: 1rem;
+    max-width: 350px;
+}
+
+.hero-container {
+    justify-content: left;
+    align-items: center;
+    background: #f2f2f2;
+    font-weight: bold;
+}
+
+.cards {
+    width: 100%;
+}
+
+article li {
+    border-bottom: 1px solid #eee;
+}
+
+article li:last-child {
+    border: none;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+    display: inline-block;
+    padding: .5rem 0rem;
+}
+
+article h3 {
+    padding: 0.5rem 0;
+    text-transform: capitalize;
+}
+
+.anchor-button {
+    background-color: #fdfdfd;
+    color: #e65c0b;
+    height: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+}
+
+/* Aside */
+
+aside {
+    margin-top: 1rem;
+}
+
+aside li {
+    max-width: 400px;
+    display: grid;
+    grid-template-columns: 2fr 20px 100px;
+    border-bottom: 1px solid #eee;
+    padding: 0.2rem;
+}
+
+aside li:last-child {
+    border: none;
+}
+
+aside img {
+    align-self: center;
+}
+
+aside i {
+   display: inline-block;
+    margin-top:1.5rem;
+    color: #f3700b;
+}
+
+
+/* Meadia query for large screen */
+
+@media screen and (min-width:700px) {
+
+    .container {
+        max-width: 1200px;
+        display: grid;
+        grid-template-areas:
+            "header header header header aside"
+            "main main main main aside";
+    }
+
+    .main {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .main article {
+        display: grid;
+        margin-left: 1rem;
+
+    }
+
+}
