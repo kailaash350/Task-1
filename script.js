@@ -1,4 +1,5 @@
-const URL = "https://polar-journey-71549.herokuapp.com/";
+const URL = "http://localhost:8000/";
+//const URL = "https://polar-journey-71549.herokuapp.com/";
 
 async function getSectionAPI() {
   try {
@@ -6,7 +7,7 @@ async function getSectionAPI() {
     if (!section.ok) {
       throw new Error(`HTTP error: ${section.status}`);
     }
-    //   const sectionList = await section.json();
+ 
 
     const article = await fetch(URL + "articleList");
     if (!article.ok) {
@@ -28,8 +29,9 @@ async function getSectionAPI() {
 }
 
 function createArticle(articleData) {
-  var ul1, ul2, ul3, ul4;
-  var li;
+  var ul1='', ul2='', ul3='';
+  var li='';
+  console.log(articleData)
   articleData.forEach(ar => {
     if (ar.sectionID == 1) {
       if (ar.hero == "true") {
@@ -37,13 +39,13 @@ function createArticle(articleData) {
        
                     <div class="hero-container">
                     <img src="${ar.imgLink}">
-                    <a href=#  target="_blank">${ar.articleTitle}</a>
+                    <a href=# >${ar.articleTitle}</a>
                     </div>
                     </li>`;
         ul1 += li;
       } else {
         li = `<li>
-                    <a href=#  target="_blank">${ar.articleTitle}</a>
+                    <a href=#>${ar.articleTitle}</a>
                     </li>`;
         ul1 += li;
       }
@@ -53,7 +55,7 @@ function createArticle(articleData) {
                         <li>
                         <div class="hero-container">
                         <img src="${ar.imgLink}">
-                        <a href=# target="_blank">${ar.articleTitle}</a>
+                        <a href=#>${ar.articleTitle}</a>
                         </div>
                         </li>
                         `;
@@ -61,7 +63,7 @@ function createArticle(articleData) {
       } else {
         li = `
                         <li>
-                        <a href=#  target="_blank">${ar.articleTitle}</a>
+                        <a href=#>${ar.articleTitle}</a>
                         </li>
                         `;
         ul2 += li;
@@ -72,7 +74,7 @@ function createArticle(articleData) {
                     <li>
                     <div class="hero-container">
                     <img src="${ar.imgLink}">
-                    <a href=# target="_blank">${ar.articleTitle}</a>
+                    <a href=#>${ar.articleTitle}</a>
                     </div>
                     </li>
                     `;
@@ -80,7 +82,7 @@ function createArticle(articleData) {
       } else {
         li = `
                     <li>
-                    <a href=#  target="_blank">${ar.articleTitle}</a>
+                    <a href=#>${ar.articleTitle}</a>
                     </li>
                     `;
         ul3 += li;
@@ -91,7 +93,7 @@ function createArticle(articleData) {
   var content = "";
   var main = document.getElementById("main");
   var seeMore = `<li>
-<a href="#" target="_blank" class="anchor-button">See More</a>
+<a href="#" class="anchor-button">See More</a>
 </li>`;
 
   content += `
@@ -105,7 +107,7 @@ function createArticle(articleData) {
                  <h3>Travel</h3>
 
                   ${ul2}
-                 ${seeMore}
+                 ${seeMore} 
                 
              </article>
              <article>
@@ -118,8 +120,8 @@ function createArticle(articleData) {
              <article>
              <h3>Advertisment</h3>
              <ul class="cards">
-                    <li><img src="./images/ad-1.JPG"></li>
-                    <li><img src="./images/ad-2.JPG" alt=""></li>
+                    <li><img src="https://demo-kailaash-aus.s3.ap-southeast-2.amazonaws.com/ad-1.JPG"></li>
+                    <li><img src="https://demo-kailaash-aus.s3.ap-southeast-2.amazonaws.com/ad-2.JPG"></li>
                 </ul>
              </article>
          `;
