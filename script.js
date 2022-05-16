@@ -1,5 +1,5 @@
-const URL = "http://localhost:8000/";
-//const URL = "https://polar-journey-71549.herokuapp.com/";
+//const URL = "http://localhost:8000/";
+const URL = "https://polar-journey-71549.herokuapp.com/";
 
 async function getSectionAPI() {
   try {
@@ -7,13 +7,7 @@ async function getSectionAPI() {
     if (!section.ok) {
       throw new Error(`HTTP error: ${section.status}`);
     }
- 
-
-    const article = await fetch(URL + "articleList");
-    if (!article.ok) {
-      throw new Error(`HTTP error: ${article.status}`);
-    }
-    const articleList = await article.json();
+    const sectionList = await section.json();
 
     const liveNews = await fetch(URL + "liveNews");
     if (!liveNews.ok) {
@@ -22,135 +16,118 @@ async function getSectionAPI() {
     const liveNewsList = await liveNews.json();
 
     parseLiveNews(liveNewsList.liveNews);
-    createArticle(articleList.articleList);
+    createSection(sectionList.sectionList);
   } catch (error) {
     console.error(`Server error : ${error}`);
   }
 }
 
-function createArticle(articleData) {
-  var ul1='', ul2='', ul3='';
-  var li='';
-  console.log(articleData)
-  articleData.forEach(ar => {
-    if (ar.sectionID == 1) {
-      if (ar.hero == "true") {
-        li = `<li>
-       
-                    <div class="hero-container">
-                    <img src="${ar.imgLink}">
-                    <a href=# >${ar.articleTitle}</a>
-                    </div>
-                    </li>`;
-        ul1 += li;
-      } else {
-        li = `<li>
-                    <a href=#>${ar.articleTitle}</a>
-                    </li>`;
-        ul1 += li;
-      }
-    } else if (ar.sectionID == 2) {
-      if (ar.hero == "true") {
-        li = `
-                        <li>
-                        <div class="hero-container">
-                        <img src="${ar.imgLink}">
-                        <a href=#>${ar.articleTitle}</a>
-                        </div>
-                        </li>
-                        `;
-        ul2 += li;
-      } else {
-        li = `
-                        <li>
-                        <a href=#>${ar.articleTitle}</a>
-                        </li>
-                        `;
-        ul2 += li;
-      }
-    } else if (ar.sectionID == 3) {
-      if (ar.hero == "true") {
-        li = `
-                    <li>
-                    <div class="hero-container">
-                    <img src="${ar.imgLink}">
-                    <a href=#>${ar.articleTitle}</a>
-                    </div>
-                    </li>
-                    `;
-        ul3 += li;
-      } else {
-        li = `
-                    <li>
-                    <a href=#>${ar.articleTitle}</a>
-                    </li>
-                    `;
-        ul3 += li;
-      }
-    } 
+// This functions calls the api based on passed arg
+
+async function callForArticle(param) {
+  try {
+    const articles = await fetch(URL + param);
+    if (!articles.ok) {
+      throw new Error(`HTTP error: ${articles.status}`);
+    }
+    const response = await articles.json();
+    const resp = response.articleList;
+    return resp;
+  } catch (error) {
+    console.log("Server Error")
+  }
+}
+
+
+// Recevies section data and calls subsequent articles listed in it.
+
+function createSection(sectionList) {
+  sectionList.forEach(sl => {
+   callForArticle(sl.sectionURL)
+      .then(resp => buildArticleSection(resp))
+        .then(data => {
+          buildSection(sl, data)
+      })
+
   });
 
-  var content = "";
-  var main = document.getElementById("main");
+}
+
+
+// builds the main content 
+
+function buildSection(sec, ar) {
+  var content = '', main = document.getElementById("main");
   var seeMore = `<li>
-<a href="#" class="anchor-button">See More</a>
-</li>`;
+                <a href="#" class="anchor-button">See More</a>
+                </li>`;
 
   content += `
-             <article>
-             <h3>Fashion</h3>
-                  ${ul1}
+             
+             <h3>${sec.sectionName}</h3>
+                  ${ar}
                  ${seeMore}
-                
-             </article>
-             <article>
-                 <h3>Travel</h3>
+            `;
 
-                  ${ul2}
-                 ${seeMore} 
-                
-             </article>
-             <article>
-                 <h3>Beauty</h3>
-
-                  ${ul3}
-                 ${seeMore}
-                
-             </article>
-             <article>
-             <h3>Advertisment</h3>
-             <ul class="cards">
-                    <li><img src="https://demo-kailaash-aus.s3.ap-southeast-2.amazonaws.com/ad-1.JPG"></li>
-                    <li><img src="https://demo-kailaash-aus.s3.ap-southeast-2.amazonaws.com/ad-2.JPG"></li>
-                </ul>
-             </article>
-         `;
-
-  main.innerHTML = content;
+  const article = document.createElement('article');
+  article.innerHTML = content;
+  main.appendChild(article);
 }
+
+// builds the small article sections
+
+function buildArticleSection(data) {
+  let li = '', ul = '';
+  data.forEach(ar => {
+if(ar.articleTitle != "Advertisment"){
+    if (ar.hero == "true") {
+      li = `<li>
+     
+                  <div class="hero-container">
+                  <img src="${ar.imgLink}">
+                  <a href=# >${ar.articleTitle}</a>
+                  </div>
+                  </li>`;
+      ul += li;
+    }
+    else {
+      li = `<li>
+                    <a href=#>${ar.articleTitle}</a>
+                    </li>`;
+      ul += li;
+    }
+  }else{
+        li=`<li class="ads"><img src=${ar.imgLink}></li>`;
+        ul+=li;
+  }
+  });
+
+  return ul;
+
+}
+
+
+
 
 // Live news Section
 
 function parseLiveNews(data) {
-  let ul = document.createElement("ul");
-  for (let k of data) {
-    let i;
-    if (k.hot == "true") {
-      i = document.createElement("i");
-      i.setAttribute("class", "fa fa-fire");
-    }
-    let iempty = document.createElement("i");
-    let img = document.createElement("img");
-    img.src = k.imgLink;
-    let a = document.createElement("a");
-    a.innerHTML = k.newsContent;
-    let li = document.createElement("li");
-    li.appendChild(a);
-    k.hot == "true" ? li.appendChild(i) : li.appendChild(iempty);
-    li.appendChild(img);
-    ul.appendChild(li);
-  }
+  var ul = '', i, iempty = `<i></i>`
+  data.forEach(k => {
 
+    if (k.hot == "true") {
+      i = `<i class="fa fa-fire"></i>`
+    }
+    ul += ` <ul>
+            <li>
+            <a href=#>${k.newsContent}</a>
+            ${k.hot == "true" ? i : iempty}
+             <img src=${k.imgLink} alt=${k.imgAlt}></img>
+            </li>
+            </ul>`
+
+  });
   var aside = document.getElementById("aside");
-  aside.appendChild(ul);
+  aside.innerHTML = ul;
+
 }

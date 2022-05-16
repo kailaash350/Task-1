@@ -94,6 +94,11 @@ article h3 {
     border: none;
     cursor: pointer;
 }
+.ads {
+    border:none;
+    padding: 0;
+    margin: 0;
+}
 
 /* Aside */
 
@@ -126,14 +131,16 @@ aside i {
 
 /* Meadia query for large screen */
 
-@media screen and (min-width:700px) {
+@media screen and (min-width:768px) {
 
     .container {
         max-width: 1200px;
-        display: grid;
+        display: inline-grid;
+   
+        margin-left:150px;
         grid-template-areas:
-            "header header header header aside"
-            "main main main main aside";
+            "header header aside"
+            "main main aside";
     }
 
     .main {
@@ -149,3 +156,5 @@ aside i {
     }
 
 }
+
+
